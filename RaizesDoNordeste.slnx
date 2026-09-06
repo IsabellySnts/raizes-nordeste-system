@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="RaizesDoNordeste.API/RaizesDoNordeste.API.csproj" Id="1c5adacb-7bc4-46c5-ac3c-3e34f6e4adc0" />
+  <Project Path="RaizesDoNordeste.Application/RaizesDoNordeste.Application.csproj" Id="235450a2-bc95-4caf-bb92-660687e74b99" />
+  <Project Path="RaizesDoNordeste.Consumer/RaizesDoNordeste.Consumer.csproj" Id="27076808-d8f4-4caf-9054-66361df7c41c" />
+  <Project Path="RaizesDoNordeste.Domain/RaizesDoNordeste.Domain.csproj" Id="4ae0a996-fcd0-44e9-8538-26a198d02558" />
+  <Project Path="RaizesDoNordeste.Infrastructure/RaizesDoNordeste.Infrastructure.csproj" Id="91490672-98b7-4b50-b1c3-03b60bd0027c" />
+</Solution>

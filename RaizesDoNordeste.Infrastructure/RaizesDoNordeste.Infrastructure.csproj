@@ -19,8 +19,4 @@
     <ProjectReference Include="..\RaizesDoNordeste.Domain\RaizesDoNordeste.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Auth\" />
-  </ItemGroup>
-
 </Project>

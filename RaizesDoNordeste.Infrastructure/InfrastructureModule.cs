@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RaizesDoNordeste.Domain.Interfaces.Repositories;
 using RaizesDoNordeste.Domain.Interfaces.Services;
 using RaizesDoNordeste.Infrastructure.Auth;
+using RaizesDoNordeste.Infrastructure.Persistence.Repositories;
 using System.Text;
 
 namespace RaizesDoNordeste.Infrastructure;
@@ -15,6 +17,7 @@ public static class InfrastructureModule
     {
         services.AddData(configuration);
         services.AddAuth(configuration);
+        services.AddRepositories();
         return services;    
     }
     private static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
@@ -65,6 +68,13 @@ public static class InfrastructureModule
             });
 
 
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IProdutoRepository, ProdutoRepository>();
+        services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         return services;
     }
 

@@ -17,4 +17,10 @@ public class Usuario : BaseEntity
     {
         Senha = senha;
     }
+
+    public void AtualizarEmail(string email)
+    {
+        Email = email;
+    }
+
 }

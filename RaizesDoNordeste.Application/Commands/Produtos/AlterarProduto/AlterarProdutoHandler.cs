@@ -4,7 +4,7 @@ using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Commands.Produtos.AlterarProduto;
 
-public class AlterarProdutoHandler(IProdutoRepository _produtoRepository) : IRequestHandler<AlterarProdutoCommand, ResultViewModel<AlterarProdutoResponse>>
+public class AlterarProdutoHandler(IProdutoRepository _produtoRepository, ICategoriaRepository _categoriaRepository) : IRequestHandler<AlterarProdutoCommand, ResultViewModel<AlterarProdutoResponse>>
 {
     public async Task<ResultViewModel<AlterarProdutoResponse>> Handle(AlterarProdutoCommand command, CancellationToken cancellationToken)
     {

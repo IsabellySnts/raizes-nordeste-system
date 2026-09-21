@@ -77,6 +77,7 @@ public static class InfrastructureModule
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        services.AddScoped<IUnidadeRepository, UnidadeRepository>();
         return services;
     }
 

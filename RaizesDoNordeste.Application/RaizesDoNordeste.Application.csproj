@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Commands\Fidelidades\AderirFidelidade\AderirFidelidadeHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RaizesDoNordeste.Domain\RaizesDoNordeste.Domain.csproj" />
   </ItemGroup>
 

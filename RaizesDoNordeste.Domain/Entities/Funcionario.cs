@@ -37,4 +37,13 @@ public class Funcionario : BaseEntity
     {
         Ativo = true;
     }
+
+    public void Atualizar(string nome, string email, string telefone, long? idUnidade, CargoFuncionario cargo)
+    {
+        Nome = nome;
+        Email = email;
+        Telefone = telefone;
+        IdUnidade = idUnidade;
+        Cargo = cargo;
+    }
 }

@@ -80,6 +80,7 @@ public static class InfrastructureModule
         services.AddScoped<IUnidadeRepository, UnidadeRepository>();
         services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
         services.AddScoped<ICardapioRepository, CardapioRepository>();
+        services.AddScoped<IEstoqueRepository, EstoqueRepository>();
 
         return services;
     }

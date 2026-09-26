@@ -77,4 +77,12 @@ public class CardapioRepository : ICardapioRepository
                 && c.IdUnidade == unidadeId
                 && (!ignorarId.HasValue || c.Id != ignorarId.Value));
     }
+
+
+    public async Task<Cardapio?> ObterPorProdutoUnidadeAsync(long produtoId, long unidadeId)
+    {
+        return await _context.Cardapios
+            .Include(c => c.Produto)
+            .FirstOrDefaultAsync(c => c.IdProduto == produtoId && c.IdUnidade == unidadeId);
+    }
 }

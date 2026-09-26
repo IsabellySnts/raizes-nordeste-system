@@ -12,4 +12,6 @@ public interface ICardapioRepository
     Task AtualizarAsync(Cardapio cardapio);
     Task RemoverAsync(Cardapio cardapio);
     Task<bool> ProdutoJaVinculadoAsync(long produtoId, long unidadeId, long? ignorarId = null);
+    Task<Cardapio?> ObterPorProdutoUnidadeAsync(long produtoId, long unidadeId);
+
 }

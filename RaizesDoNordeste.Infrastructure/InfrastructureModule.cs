@@ -84,6 +84,7 @@ public static class InfrastructureModule
         services.AddScoped<IFidelidadeRepository, FidelidadeRepository>();
         services.AddScoped<IPedidoRepository, PedidoRepository>();
         services.AddScoped<ICampanhaRepository, CampanhaRepository>();
+        services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
 
         return services;
     }

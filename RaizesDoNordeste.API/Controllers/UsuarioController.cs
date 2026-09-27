@@ -1,8 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Usuarios.AtualizarUsuario;
 using RaizesDoNordeste.Application.Commands.Usuarios.CriarUsuario;
+using RaizesDoNordeste.Application.Commands.Usuarios.Login;
 using RaizesDoNordeste.Application.Commands.Usuarios.RemoverUsuario;
+using RaizesDoNordeste.Application.Commons;
 using RaizesDoNordeste.Application.Queries.Usuarios.ObterTodosUsuarios;
 using RaizesDoNordeste.Application.Queries.Usuarios.ObterUsuarioPorId;
 
@@ -75,6 +78,18 @@ namespace RaizesDoNordeste.API.Controllers
                 return BadRequest(new { error = response.Message });
 
             return NoContent();
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginCommand request)
+        {
+            var result = await _mediator.Send(request);
+
+            if (!result.IsSuccess)
+                return Unauthorized(result);
+
+            return Ok(result);
         }
     }
 }

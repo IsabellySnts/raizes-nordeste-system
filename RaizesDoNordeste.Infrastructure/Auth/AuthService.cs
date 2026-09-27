@@ -54,4 +54,9 @@ public class AuthService : IAuthService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public bool VerifyHash(string senha, string hashArmazenado)
+    {
+        return BCrypt.Net.BCrypt.Verify(senha, hashArmazenado);
+    }
 }

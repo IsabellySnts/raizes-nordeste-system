@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using RaizesDoNordeste.Application.Commands.Auditoria.RegistrarAuditoria;
 using RaizesDoNordeste.Application.Commons;
+using RaizesDoNordeste.Domain.Enums;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Commands.Estoques.AjustarEstoque;
 
-public class AjustarEstoqueHandler(IEstoqueRepository _repository) : IRequestHandler<AjustarEstoqueCommand, ResultViewModel<AjustarEstoqueResponse>>
+public class AjustarEstoqueHandler(IEstoqueRepository _repository, IMediator _mediator) : IRequestHandler<AjustarEstoqueCommand, ResultViewModel<AjustarEstoqueResponse>>
 {
     public async Task<ResultViewModel<AjustarEstoqueResponse>> Handle(
         AjustarEstoqueCommand command, CancellationToken cancellationToken)
@@ -26,6 +28,15 @@ public class AjustarEstoqueHandler(IEstoqueRepository _repository) : IRequestHan
 
         estoque.Ajustar(command.NovaQuantidade, command.NovaQuantidadeMinima);
         await _repository.AtualizarAsync(estoque);
+
+        await _mediator.Send(new RegistrarAuditoriaCommand
+        {
+            IdFuncionario = command.IdFuncionario,
+            Acao = AcaoAuditoria.AjusteEstoque,
+            TipoEntidadeAfetada = "Estoque",
+            IdEntidadeAfetada = estoque.Id,
+            Detalhes = $"Ajuste de {command.NovaQuantidade} unidades no estoque #{estoque.Id} na unidade #{command.IdUnidade}"
+        }, cancellationToken);
 
         var response = new AjustarEstoqueResponse
         {

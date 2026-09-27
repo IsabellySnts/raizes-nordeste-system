@@ -2,7 +2,7 @@
 using RaizesDoNordeste.Application.Commons;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
-namespace RaizesDoNordeste.Application.Queries.Campanhas.ObterCampanhaPorId;
+namespace RaizesDoNordeste.Application.Queries.Campanhas.ObterCampanhas;
 
 public class ObterCampanhasHandler(ICampanhaRepository _repository) : IRequestHandler<ObterCampanhasQuery, ResultViewModel<IEnumerable<CampanhaQueryResponse>>>
 {

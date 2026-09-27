@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using RaizesDoNordeste.Application.Commands.Auditoria.RegistrarAuditoria;
 using RaizesDoNordeste.Application.Commons;
 using RaizesDoNordeste.Domain.Enums;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
@@ -7,7 +8,8 @@ namespace RaizesDoNordeste.Application.Commands.Pedidos.CancelarPedido;
 
 public class CancelarPedidoHandler(
     IPedidoRepository _pedidoRepository,
-    IEstoqueRepository _estoqueRepository)
+    IEstoqueRepository _estoqueRepository,
+    IMediator _mediator)
     : IRequestHandler<CancelarPedidoCommand, ResultViewModel<CancelarPedidoResponse>>
 {
     public async Task<ResultViewModel<CancelarPedidoResponse>> Handle(
@@ -29,13 +31,11 @@ public class CancelarPedidoHandler(
         var statusAnterior = pedido.Status.ToString();
 
         if (command.CanceladoPeloCliente && !pedido.PodeCancelarPeloCliente())
-            return ResultViewModel<CancelarPedidoResponse>.Error(
-                "O pedido já está em preparo ou em etapa posterior. Apenas o gerente pode cancelar.");
+            return ResultViewModel<CancelarPedidoResponse>.Error("O pedido já está em preparo ou em etapa posterior. Apenas o gerente pode cancelar.");
 
         var cancelou = pedido.AtualizarStatus(StatusPedido.Cancelado);
         if (!cancelou)
-            return ResultViewModel<CancelarPedidoResponse>.Error(
-                $"Não é possível cancelar um pedido com status '{statusAnterior}'.");
+            return ResultViewModel<CancelarPedidoResponse>.Error($"Não é possível cancelar um pedido com status '{statusAnterior}'.");
 
         if (statusAnterior == StatusPedido.Pago.ToString()
             || statusAnterior == StatusPedido.EmPreparo.ToString()
@@ -55,6 +55,15 @@ public class CancelarPedidoHandler(
         }
 
         await _pedidoRepository.AtualizarAsync(pedido);
+
+        await _mediator.Send(new RegistrarAuditoriaCommand
+        {
+            IdFuncionario = command.IdFuncionario.GetValueOrDefault(),
+            Acao = AcaoAuditoria.Cancelamento,
+            TipoEntidadeAfetada = "Pedido",
+            IdEntidadeAfetada = command.IdPedido,
+            Detalhes = $"Pedido #{command.IdPedido} cancelado"
+        }, cancellationToken); 
 
         var response = new CancelarPedidoResponse
         {

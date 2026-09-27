@@ -9,6 +9,9 @@ public class AjustarEstoqueCommandValidator : AbstractValidator<AjustarEstoqueCo
         RuleFor(x => x.IdUnidade)
             .GreaterThan(0).WithMessage("A unidade é obrigatória.");
 
+        RuleFor(x => x.IdFuncionario)
+            .GreaterThan(0).WithMessage("O funcionário é obrigatório.");
+
         RuleFor(x => x.IdProduto)
             .GreaterThan(0).WithMessage("O produto é obrigatório.");
 

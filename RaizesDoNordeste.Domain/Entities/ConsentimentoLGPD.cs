@@ -20,4 +20,9 @@ public class ConsentimentoLGPD : BaseEntity
         Aceite = aceite;
         Data = DateTime.UtcNow;
     }
+
+    public void Revogar()
+    {
+        Data = DateTime.UtcNow;
+    }
 }

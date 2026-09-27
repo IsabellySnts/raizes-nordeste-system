@@ -18,7 +18,7 @@ public static class InfrastructureModule
         services.AddData(configuration);
         services.AddAuth(configuration);
         services.AddRepositories();
-        return services;    
+        return services;
     }
     private static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
     {
@@ -85,6 +85,7 @@ public static class InfrastructureModule
         services.AddScoped<IPedidoRepository, PedidoRepository>();
         services.AddScoped<ICampanhaRepository, CampanhaRepository>();
         services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
+        services.AddScoped<IConsentimentoLGPDRepository, ConsentimentoLGPDRepository>();
 
         return services;
     }

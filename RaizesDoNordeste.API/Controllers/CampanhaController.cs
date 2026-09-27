@@ -4,6 +4,8 @@ using RaizesDoNordeste.Application.Commands.Campanhas.AlterarStatusCampanha;
 using RaizesDoNordeste.Application.Commands.Campanhas.AtualizarCampanha;
 using RaizesDoNordeste.Application.Commands.Campanhas.CriarCampanha;
 using RaizesDoNordeste.Application.Queries.Campanhas.ObterCampanhaPorId;
+using RaizesDoNordeste.Application.Queries.Campanhas.ObterCampanhas;
+
 
 namespace RaizesDoNordeste.API.Controllers;
 

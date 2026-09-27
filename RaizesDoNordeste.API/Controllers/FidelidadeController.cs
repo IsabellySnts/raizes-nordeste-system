@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Fidelidades.AcumularPontos;
 using RaizesDoNordeste.Application.Commands.Fidelidades.AderirFidelidade;
 using RaizesDoNordeste.Application.Commands.Fidelidades.ResgatarPontos;
+using RaizesDoNordeste.Application.Queries.Categorias.ObterCategoriaPorId;
 using RaizesDoNordeste.Application.Queries.Fidelidades.ObterExtratoFidelidade;
 using RaizesDoNordeste.Application.Queries.Fidelidades.ObterFidelidadeCliente;
 
 namespace RaizesDoNordeste.API.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class FidelidadeController(IMediator _mediator) : BaseController
 {
     [HttpPost("aderir")]
@@ -18,7 +21,7 @@ public class FidelidadeController(IMediator _mediator) : BaseController
         if (!response.IsSuccess)
             return BadRequest(new { error = response.Message });
 
-        return Created($"api/clientes/{clienteId}/fidelidade", response.Data);
+        return CreatedAtAction(nameof(Consultar), new { id = response.Data!.Id }, response.Data);
     }
 
     [HttpGet]

@@ -2,7 +2,7 @@
 
 public enum StatusCampanha
 {
-    Ativa,
-    Inativa,
-    Encerrada
+    Ativa = 1,
+    Inativa = 2,
+    Encerrada = 3
 }

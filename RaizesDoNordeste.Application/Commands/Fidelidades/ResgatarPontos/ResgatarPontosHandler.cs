@@ -4,7 +4,7 @@ using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Commands.Fidelidades.ResgatarPontos;
 
-public class ResgatarPontosHandler(IFidelidadeRepository _repository) : IRequestHandler<ResgatarPontosCommand, ResultViewModel<ResgatarPontosResponse>>
+public class ResgatarPontosHandler(IFidelidadeRepository _repository, IMediator _mediator) : IRequestHandler<ResgatarPontosCommand, ResultViewModel<ResgatarPontosResponse>>
 {
     public async Task<ResultViewModel<ResgatarPontosResponse>> Handle(
         ResgatarPontosCommand command, CancellationToken cancellationToken)
@@ -26,8 +26,7 @@ public class ResgatarPontosHandler(IFidelidadeRepository _repository) : IRequest
 
         var resgatou = fidelidade.ResgatarPontos(command.Pontos, command.IdPedido);
         if (!resgatou)
-            return ResultViewModel<ResgatarPontosResponse>.Error(
-                $"Saldo insuficiente. Saldo atual: {fidelidade.SaldoPontos} pontos. Tentou resgatar: {command.Pontos} pontos.");
+            return ResultViewModel<ResgatarPontosResponse>.Error($"Saldo insuficiente. Saldo atual: {fidelidade.SaldoPontos} pontos. Tentou resgatar: {command.Pontos} pontos.");
 
         await _repository.AtualizarAsync(fidelidade);
 

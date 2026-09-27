@@ -5,6 +5,7 @@ namespace RaizesDoNordeste.Application.Commands.Estoques.AjustarEstoque;
 
 public sealed record AjustarEstoqueCommand : IRequest<ResultViewModel<AjustarEstoqueResponse>>
 {
+    public long IdFuncionario { get; set; }
     public long IdUnidade { get; init; }
     public long IdProduto { get; init; }
     public int NovaQuantidade { get; init; }

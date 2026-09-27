@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RaizesDoNordeste.Domain.Interfaces.Repositories;
 using RaizesDoNordeste.Domain.Interfaces.Services;
 using RaizesDoNordeste.Infrastructure.Auth;
+using RaizesDoNordeste.Infrastructure.Persistence.Repositories;
 using System.Text;
 
 namespace RaizesDoNordeste.Infrastructure;
@@ -15,7 +17,8 @@ public static class InfrastructureModule
     {
         services.AddData(configuration);
         services.AddAuth(configuration);
-        return services;    
+        services.AddRepositories();
+        return services;
     }
     private static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
     {
@@ -64,6 +67,25 @@ public static class InfrastructureModule
                 };
             });
 
+
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IProdutoRepository, ProdutoRepository>();
+        services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+        services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        services.AddScoped<IUnidadeRepository, UnidadeRepository>();
+        services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
+        services.AddScoped<ICardapioRepository, CardapioRepository>();
+        services.AddScoped<IEstoqueRepository, EstoqueRepository>();
+        services.AddScoped<IFidelidadeRepository, FidelidadeRepository>();
+        services.AddScoped<IPedidoRepository, PedidoRepository>();
+        services.AddScoped<ICampanhaRepository, CampanhaRepository>();
+        services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
+        services.AddScoped<IConsentimentoLGPDRepository, ConsentimentoLGPDRepository>();
 
         return services;
     }

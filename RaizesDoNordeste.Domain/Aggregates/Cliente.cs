@@ -31,6 +31,15 @@ public class Cliente : BaseEntity
         IdUsuario = idUsuario;
     }
 
+    public void Atualizar(string nomeCompleto, string telefone, string email, DateTime dataNascimento)
+    {
+        NomeCompleto = nomeCompleto;
+        Telefone = telefone;
+        Email = email;
+        DataNascimento = dataNascimento;
+        DataAtualizacao = DateTime.UtcNow;
+    }
+
     public void RegistrarConsentimento(ConsentimentoLGPD consentimento)
     {
         Consentimentos.Add(consentimento);

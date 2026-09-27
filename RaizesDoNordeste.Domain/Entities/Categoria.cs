@@ -13,4 +13,10 @@ public class Categoria : BaseEntity
         Nome = nome;
         Descricao = descricao;
     }
+
+    public void Atualizar(string nome, string? descricao)
+    {
+        Nome = nome;
+        Descricao = descricao;
+    }
 }

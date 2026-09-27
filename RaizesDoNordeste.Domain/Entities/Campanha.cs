@@ -24,6 +24,21 @@ public class Campanha : BaseEntity
         Status = StatusCampanha.Ativa;
         Beneficio = beneficio;
     }
+    public void Atualizar(string nome, string? descricao, string? criterios,
+                      DateTime dataInicio, DateTime dataFim, string? beneficio)
+    {
+        Nome = nome;
+        Descricao = descricao;
+        Criterios = criterios;
+        DataInicio = dataInicio;
+        DataFim = dataFim;
+        Beneficio = beneficio;
+    }
+
+    public void Ativar()
+    {
+        Status = StatusCampanha.Ativa;
+    }
 
     public bool EstaAtiva(DateTime dataAtual)
     {

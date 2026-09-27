@@ -1,9 +1,11 @@
-﻿namespace RaizesDoNordeste.Domain.Entities;
+﻿using RaizesDoNordeste.Domain.Enums;
+
+namespace RaizesDoNordeste.Domain.Entities;
 
 public class Auditoria : BaseEntity
 {
     public long IdFuncionario { get; private set; }
-    public string Acao { get; private set; }
+    public AcaoAuditoria Acao { get; private set; }
     public string TipoEntidadeAfetada { get; private set; } = string.Empty;
     public long IdEntidadeAfetada { get; private set; }
     public string? Detalhes { get; private set; }
@@ -12,7 +14,7 @@ public class Auditoria : BaseEntity
 
     protected Auditoria() { }
 
-    public Auditoria(long idFuncionario, string acao, string tipoEntidadeAfetada, long idEntidadeAfetada, string? detalhes)
+    public Auditoria(long idFuncionario, AcaoAuditoria acao, string tipoEntidadeAfetada, long idEntidadeAfetada, string? detalhes)
     {
         IdFuncionario = idFuncionario;
         Acao = acao;

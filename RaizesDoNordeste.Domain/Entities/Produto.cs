@@ -35,4 +35,16 @@ public class Produto : BaseEntity
         if (DataInicioDisponibilidade == null || DataFimDisponibilidade == null) return true;
         return dataAtual >= DataInicioDisponibilidade && dataAtual <= DataFimDisponibilidade;
     }
+
+    public void Atualizar(string nome, long idCategoria, string? descricao, decimal preco, bool flagSazonal, DateTime? dataInicio, DateTime? dataFim, string? foto)
+    {
+        Nome = nome;
+        IdCategoria = idCategoria;
+        Descricao = descricao;
+        Preco = preco;
+        FlagSazonal = flagSazonal;
+        DataInicioDisponibilidade = dataInicio;
+        DataFimDisponibilidade = dataFim;
+        Foto = foto;
+    }
 }

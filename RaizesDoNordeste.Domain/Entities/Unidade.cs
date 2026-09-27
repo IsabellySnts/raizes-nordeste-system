@@ -33,4 +33,19 @@ public class Unidade : BaseEntity
         HorarioFuncionamento = horarioFuncionamento;
         TipoCozinha = tipoCozinha;
     }
+
+    public void Atualizar(string nome, string cidade, string estado, string pais,
+                      string logradouro, string? complemento, string diasFuncionamento,
+                      string horarioFuncionamento, TipoCozinha tipoCozinha)
+    {
+        Nome = nome;
+        Cidade = cidade;
+        Estado = estado;
+        Pais = pais;
+        Logradouro = logradouro;
+        Complemento = complemento;
+        DiasFuncionamento = diasFuncionamento;
+        HorarioFuncionamento = horarioFuncionamento;
+        TipoCozinha = tipoCozinha;
+    }
 }

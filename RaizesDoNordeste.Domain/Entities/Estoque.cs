@@ -41,4 +41,12 @@ public class Estoque : BaseEntity
     {
         return Quantidade > QuantidadeMinima;
     }
+
+    public void Ajustar(int novaQuantidade, int? novaQuantidadeMinima)
+    {
+        Quantidade = novaQuantidade;
+        if (novaQuantidadeMinima.HasValue)
+            QuantidadeMinima = novaQuantidadeMinima.Value;
+        DataAtualizacao = DateTime.UtcNow;
+    }
 }

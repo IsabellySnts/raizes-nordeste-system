@@ -30,4 +30,9 @@ public class Cardapio : BaseEntity
     {
         PrecoLocal = preco;
     }
+
+    public void AtualizarVariacaoRegional(string? variacao)
+    {
+        VariacaoRegional = variacao;
+    }
 }

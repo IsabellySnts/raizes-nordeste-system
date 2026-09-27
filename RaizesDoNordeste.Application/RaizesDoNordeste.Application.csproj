@@ -7,17 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Commands\Fidelidades\AderirFidelidade\AderirFidelidadeHandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\RaizesDoNordeste.Domain\RaizesDoNordeste.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.2.0" />
     <PackageReference Include="Scrutor" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\Campanhas\ObterCampanhas\" />
   </ItemGroup>
 
 </Project>

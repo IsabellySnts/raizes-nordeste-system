@@ -11,15 +11,6 @@ public class CriarClienteHandler(IClienteRepository _clienteRepository, IUsuario
 {
     public async Task<ResultViewModel<CriarClienteResponse>> Handle(CriarClienteCommand command, CancellationToken cancellationToken)
     {
-        var validator = new CriarClienteValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            var erros = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage));
-            return ResultViewModel<CriarClienteResponse>.Error(erros);
-        }
-
         var cpfExiste = await _clienteRepository.CpfExisteAsync(command.Cpf);
         if (cpfExiste)
             return ResultViewModel<CriarClienteResponse>.Error("Este CPF já está cadastrado.");

@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RaizesDoNordeste.Application.Interfaces;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 using RaizesDoNordeste.Domain.Interfaces.Services;
 using RaizesDoNordeste.Infrastructure.Auth;
 using RaizesDoNordeste.Infrastructure.Persistence.Repositories;
+using RaizesDoNordeste.Infrastructure.Services;
+using RaizesDoNordeste.Infrastructure.Settings;
 using System.Text;
 
 namespace RaizesDoNordeste.Infrastructure;
@@ -17,7 +20,7 @@ public static class InfrastructureModule
     {
         services.AddData(configuration);
         services.AddAuth(configuration);
-        services.AddRepositories();
+        services.AddRepositories(configuration);
         return services;
     }
     private static IServiceCollection AddData(this IServiceCollection services, IConfiguration configuration)
@@ -71,7 +74,7 @@ public static class InfrastructureModule
         return services;
     }
 
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    private static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IProdutoRepository, ProdutoRepository>();
         services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -86,6 +89,10 @@ public static class InfrastructureModule
         services.AddScoped<ICampanhaRepository, CampanhaRepository>();
         services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
         services.AddScoped<IConsentimentoLGPDRepository, ConsentimentoLGPDRepository>();
+        services.Configure<StripeSettings>(configuration.GetSection("Stripe"));
+        services.AddScoped<IPagamentoService, PagamentoService>();
+        services.AddScoped<IPagamentoRepository, PagamentoRepository >();
+
 
         return services;
     }

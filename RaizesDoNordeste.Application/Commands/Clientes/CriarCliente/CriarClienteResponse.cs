@@ -8,4 +8,12 @@ public class CriarClienteResponse
     public string Telefone { get; set; } = string.Empty;
     public DateTime DataNascimento { get; set; }
     public DateTime DataCadastro { get; set; }
+    public List<ConsentimentoResponse> Consentimentos { get; set; } = new();
+
+}
+
+public sealed record ConsentimentoResponse
+{
+    public string Permissao { get; init; } = string.Empty;
+    public bool Aceite { get; init; }
 }

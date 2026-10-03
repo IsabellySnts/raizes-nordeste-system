@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using RaizesDoNordeste.Domain.Enums;
 
 namespace RaizesDoNordeste.Application.Commands.Clientes.CriarCliente;
 
@@ -37,5 +38,18 @@ public class CriarClienteValidator : AbstractValidator<CriarClienteCommand>
 
         RuleFor(x => x.ConfirmarSenha)
             .Equal(x => x.Senha).WithMessage("A confirmação de senha não corresponde.");
+
+        RuleFor(x => x.Consentimentos)
+            .NotEmpty().WithMessage("Os consentimentos são obrigatórios.");
+
+        RuleFor(x => x)
+            .Must(x => x.Consentimentos != null
+                && x.Consentimentos.Exists(c => c.Permissao == TipoConsentimento.DadosPessoais && c.Aceite))
+            .WithMessage("O consentimento de 'Dados Pessoais' é obrigatório para o cadastro.");
+
+        RuleFor(x => x)
+            .Must(x => x.Consentimentos != null
+                && x.Consentimentos.Exists(c => c.Permissao == TipoConsentimento.TermosDeUso && c.Aceite))
+            .WithMessage("O consentimento de 'Termos de Uso' é obrigatório para o cadastro.");
     }
 }

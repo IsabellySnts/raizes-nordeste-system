@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using RaizesDoNordeste.Application.Commons;
 using RaizesDoNordeste.Domain.Entities;
+using RaizesDoNordeste.Domain.Enums;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Commands.Funcionarios.CriarFuncionario;
@@ -41,7 +42,7 @@ public class CriarFuncionarioHandler(
         }
 
         var senhaHash = BCrypt.Net.BCrypt.HashPassword(command.Senha);
-        var usuario = new Usuario(command.Email, senhaHash);
+        var usuario = new Usuario(command.Email, senhaHash, MapearPerfil(command.Cargo));
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
 
         var funcionario = new Funcionario(
@@ -69,5 +70,16 @@ public class CriarFuncionarioHandler(
         };
 
         return ResultViewModel<CriarFuncionarioResponse>.Success(response);
+    }
+
+    private static PerfilUsuario MapearPerfil(CargoFuncionario cargo)
+    {
+        return cargo switch
+        {
+            CargoFuncionario.Gerente => PerfilUsuario.Gerente,
+            CargoFuncionario.GestorMatriz => PerfilUsuario.Admin,
+            CargoFuncionario.Cozinheiro => PerfilUsuario.Cozinheiro,
+            _ => PerfilUsuario.Atendente
+        };
     }
 }

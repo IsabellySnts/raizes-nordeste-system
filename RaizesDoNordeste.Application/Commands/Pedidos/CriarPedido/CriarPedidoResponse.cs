@@ -11,6 +11,8 @@ public class CriarPedidoResponse
     public decimal ValorTotal { get; set; }
     public DateTime DataCriacao { get; set; }
     public List<ItemPedidoResponse> Itens { get; set; } = new();
+    public decimal ValorDesconto { get; set; }
+    public int PontosResgatados { get; set; }
 }
 
 public class ItemPedidoResponse

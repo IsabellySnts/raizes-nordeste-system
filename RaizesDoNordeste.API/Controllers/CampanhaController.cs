@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Campanhas.AlterarStatusCampanha;
 using RaizesDoNordeste.Application.Commands.Campanhas.AtualizarCampanha;
@@ -11,6 +12,8 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin,Gerente")]
+
 public class CampanhaController(IMediator _mediator) : BaseController
 {
     [HttpPost]

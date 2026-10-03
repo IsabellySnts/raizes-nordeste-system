@@ -33,6 +33,7 @@ public class RaizesDoNordesteDbContext : DbContext
             e.Property(o => o.Id).UseIdentityColumn();
             e.Property(x => x.Email).IsRequired().HasMaxLength(100);
             e.Property(x => x.Senha).IsRequired().HasMaxLength(100);
+            e.Property(u => u.Perfil).HasConversion<string>();
         });
 
         builder.Entity<Cliente>(e =>

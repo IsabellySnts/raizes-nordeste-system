@@ -48,6 +48,7 @@ public class AuthService : IAuthService
         {
             new Claim("userId", user.Id.ToString()),
             new Claim("username", user.Email),
+            new Claim(ClaimTypes.Role, user.Perfil.ToString())
         };
 
         var token = new JwtSecurityToken(issuer, audience, claims, null, DateTime.UtcNow.AddHours(2), credentials);

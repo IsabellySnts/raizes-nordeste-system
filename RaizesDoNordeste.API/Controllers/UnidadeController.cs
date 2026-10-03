@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Unidades.AtualizarUnidade;
 using RaizesDoNordeste.Application.Commands.Unidades.CriarUnidade;
@@ -10,6 +11,8 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
+
 public class UnidadeController : BaseController
 {
     private readonly IMediator _mediator;
@@ -31,6 +34,7 @@ public class UnidadeController : BaseController
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> ObterPorId(long id)
     {
         var response = await _mediator.Send(new ObterUnidadePorIdQuery { Id = id });
@@ -42,6 +46,7 @@ public class UnidadeController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> ObterTodas()
     {
         var response = await _mediator.Send(new ObterTodasUnidadesQuery());

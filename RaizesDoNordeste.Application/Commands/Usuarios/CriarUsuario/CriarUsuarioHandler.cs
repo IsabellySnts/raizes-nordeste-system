@@ -24,7 +24,7 @@ public class CriarUsuarioHandler(IUsuarioRepository _repository) : IRequestHandl
             return ResultViewModel<CriarUsuarioResponse>.Error("Este email já está cadastrado.");
 
         var senhaHash = BCrypt.Net.BCrypt.HashPassword(command.Senha);
-        var usuario = new Usuario(command.Email, senhaHash);
+        var usuario = new Usuario(command.Email, senhaHash, command.Perfil);
 
         var usuarioCriado = await _repository.CriarAsync(usuario);
 

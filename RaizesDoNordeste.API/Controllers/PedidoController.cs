@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Pedidos.AtualizarStatusPedido;
 using RaizesDoNordeste.Application.Commands.Pedidos.CancelarPedido;
@@ -11,9 +12,11 @@ namespace RaizesDoNordeste.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PedidoController(IMediator _mediator) : BaseController
     {
         [HttpPost]
+        [Authorize(Roles = "Admin,Gerente,Atendente")]
         public async Task<IActionResult> Criar([FromBody] CriarPedidoCommand command)
         {
             var response = await _mediator.Send(command);
@@ -36,6 +39,7 @@ namespace RaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("unidade/{unidadeId}")]
+        [Authorize(Roles = "Admin,Gerente,Atendente")]
         public async Task<IActionResult> ObterPorUnidade(long unidadeId)
         {
             var response = await _mediator.Send(new ObterPedidosPorUnidadeQuery { IdUnidade = unidadeId });
@@ -47,6 +51,7 @@ namespace RaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("unidade/{unidadeId}/cozinha")]
+        [Authorize(Roles = "Admin,Gerente,Atendente,Cozinheiro")]
         public async Task<IActionResult> FilaCozinha(long unidadeId)
         {
             var response = await _mediator.Send(new ObterFilaCozinhaQuery { IdUnidade = unidadeId });
@@ -58,6 +63,7 @@ namespace RaizesDoNordeste.API.Controllers
         }
 
         [HttpPatch("{id}/status")]
+        [Authorize(Roles = "Admin,Gerente,Atendente,Cozinheiro")]
         public async Task<IActionResult> AtualizarStatus(long id, [FromBody] AtualizarStatusPedidoCommand command)
         {
             if (id != command.IdPedido)
@@ -72,6 +78,7 @@ namespace RaizesDoNordeste.API.Controllers
         }
 
         [HttpPost("{id}/cancelar")]
+        [Authorize(Roles = "Admin,Gerente")]
         public async Task<IActionResult> Cancelar(long id, [FromBody] CancelarPedidoCommand command)
         {
             if (id != command.IdPedido)

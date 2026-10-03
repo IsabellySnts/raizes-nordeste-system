@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Estoques.AjustarEstoque;
 using RaizesDoNordeste.Application.Commands.Estoques.CriarEstoque;
@@ -9,6 +10,8 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin,Gerente,Atendente")]
+
 public class EstoqueController(IMediator _mediator) : BaseController
 {
     [HttpGet]
@@ -22,6 +25,7 @@ public class EstoqueController(IMediator _mediator) : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPost]
     public async Task<IActionResult> Criar(long unidadeId, [FromBody] CriarEstoqueCommand command)
     {
@@ -36,6 +40,7 @@ public class EstoqueController(IMediator _mediator) : BaseController
         return Created($"api/unidades/{unidadeId}/estoque", response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPatch("{produtoId}/repor")]
     public async Task<IActionResult> Repor(long unidadeId, long produtoId, [FromBody] ReporEstoqueCommand command)
     {
@@ -50,6 +55,7 @@ public class EstoqueController(IMediator _mediator) : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPatch("{produtoId}/ajustar")]
     public async Task<IActionResult> Ajustar(long unidadeId, long produtoId, [FromBody] AjustarEstoqueCommand command)
     {

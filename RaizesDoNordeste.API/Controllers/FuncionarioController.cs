@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Funcionarios.AtivarFuncionario;
 using RaizesDoNordeste.Application.Commands.Funcionarios.AtualizarFuncionario;
@@ -11,6 +12,8 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
+
 public class FuncionarioController(IMediator _mediator): BaseController
 {
     [HttpPost]
@@ -24,6 +27,7 @@ public class FuncionarioController(IMediator _mediator): BaseController
         return CreatedAtAction(nameof(ObterPorId), new { id = response.Data!.Id }, response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorId(long id)
     {
@@ -35,6 +39,7 @@ public class FuncionarioController(IMediator _mediator): BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpGet]
     public async Task<IActionResult> ObterTodos([FromQuery] long? unidadeId)
     {

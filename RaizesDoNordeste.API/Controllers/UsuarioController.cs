@@ -13,6 +13,8 @@ namespace RaizesDoNordeste.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
+
     public class UsuarioController : ControllerBase
     {
         private readonly IMediator _mediator;

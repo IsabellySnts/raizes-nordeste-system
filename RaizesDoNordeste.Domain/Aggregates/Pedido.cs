@@ -18,6 +18,8 @@ public class Pedido : BaseEntity
     public Funcionario? Funcionario { get; private set; }
     public Pagamento? Pagamento { get; private set; }
     public ICollection<ItemPedido> Itens { get; private set; } = new List<ItemPedido>();
+    public decimal ValorDesconto { get; private set; }
+
 
     protected Pedido() { }
 
@@ -83,5 +85,12 @@ public class Pedido : BaseEntity
     public bool PodeCancelarPeloCliente()
     {
         return Status == StatusPedido.AguardandoPagamento || Status == StatusPedido.Pago;
+    }
+
+    public void AplicarDesconto(decimal desconto)
+    {
+        ValorDesconto = desconto;
+        ValorTotal -= desconto;
+        DataAtualizacao = DateTime.UtcNow;
     }
 }

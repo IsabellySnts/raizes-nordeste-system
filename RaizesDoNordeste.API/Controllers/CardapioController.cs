@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Cardapios.AtualizarCardapio;
 using RaizesDoNordeste.Application.Commands.Cardapios.DesvincularProdutoUnidade;
@@ -9,6 +10,7 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CardapioController(IMediator _mediator) : BaseController
 {
 
@@ -27,6 +29,7 @@ public class CardapioController(IMediator _mediator) : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPost]
     public async Task<IActionResult> VincularProduto(long unidadeId, [FromBody] VincularProdutoCommand command)
     {
@@ -42,6 +45,7 @@ public class CardapioController(IMediator _mediator) : BaseController
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> Atualizar(long unidadeId, long id, [FromBody] AtualizarCardapioCommand command)
     {
         if (id != command.Id)
@@ -56,6 +60,7 @@ public class CardapioController(IMediator _mediator) : BaseController
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> Desvincular(long unidadeId, long id)
     {
         var response = await _mediator.Send(new DesvincularProdutoCommand { Id = id });

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Categorias.AlterarCategoria;
 using RaizesDoNordeste.Application.Commands.Categorias.CriarCategoria;
@@ -9,8 +10,10 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CategoriaController(IMediator _mediator) : BaseController
 {
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarCategoriaCommand command)
     {
@@ -48,6 +51,7 @@ public class CategoriaController(IMediator _mediator) : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Atualizar(long id, [FromBody] AlterarCategoriaCommand command)
     {

@@ -11,6 +11,7 @@ public sealed record CriarPedidoCommand : IRequest<ResultViewModel<CriarPedidoRe
     public long? IdFuncionario { get; init; }
     public CanalOrigem CanalOrigem { get; init; }
     public List<ItemPedidoCommand> Itens { get; init; } = new();
+    public int? PontosParaResgatar { get; set; }
 }
 
 public sealed record ItemPedidoCommand

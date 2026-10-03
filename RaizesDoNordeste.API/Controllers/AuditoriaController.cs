@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Queries.Auditorias.ObterAuditorias;
 using RaizesDoNordeste.Domain.Enums;
@@ -7,6 +8,7 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
 public class AuditoriaController(IMediator _mediator) : BaseController
 {
     [HttpGet]

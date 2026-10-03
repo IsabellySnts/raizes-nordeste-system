@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Clientes.AnonimizarCliente;
 using RaizesDoNordeste.Application.Commands.Clientes.AtualizarCliente;
@@ -19,6 +20,7 @@ public class ClienteController : BaseController
         _mediator = mediator;
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarClienteCommand command)
     {
@@ -30,6 +32,7 @@ public class ClienteController : BaseController
         return CreatedAtAction(nameof(ObterPorId), new { id = response.Data!.Id }, response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente, Atendente")]
     [HttpGet("{id}")]
     public async Task<IActionResult> ObterPorId(long id)
     {
@@ -41,6 +44,7 @@ public class ClienteController : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpGet]
     public async Task<IActionResult> ObterTodos()
     {
@@ -52,6 +56,7 @@ public class ClienteController : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Atualizar(long id, [FromBody] AtualizarClienteCommand command)
     {
@@ -66,6 +71,7 @@ public class ClienteController : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Gerente")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Anonimizar(long id)
     {

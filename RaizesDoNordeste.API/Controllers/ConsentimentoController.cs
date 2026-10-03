@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Consentimento.RegistrarConsentimento;
 using RaizesDoNordeste.Application.Commands.Consentimento.RevogarConsentimento;
@@ -11,6 +12,7 @@ namespace RaizesDoNordeste.API.Controllers;
 [ApiController]
 public class ConsentimentoController (IMediator _mediator) : BaseController
 {
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Registrar(long clienteId, [FromBody] RegistrarConsentimentoCommand command)
     {
@@ -25,6 +27,7 @@ public class ConsentimentoController (IMediator _mediator) : BaseController
         return CreatedAtAction(nameof(ObterPorCliente), new { clienteId }, response.Data);
     }
 
+    [Authorize(Roles = "Admin,Cliente")]
     [HttpGet]
     public async Task<IActionResult> ObterPorCliente(long clienteId)
     {
@@ -36,6 +39,7 @@ public class ConsentimentoController (IMediator _mediator) : BaseController
         return Ok(response.Data);
     }
 
+    [Authorize(Roles = "Admin,Cliente")]
     [HttpDelete("{permissao}")]
     public async Task<IActionResult> Revogar(long clienteId, TipoConsentimento permissao)
     {

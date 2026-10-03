@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Produtos.AlterarProduto;
 using RaizesDoNordeste.Application.Commands.Produtos.CriarProduto;
@@ -11,6 +12,7 @@ namespace RaizesDoNordeste.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ProdutosController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,6 +23,7 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> Criar([FromBody] CriarProdutoCommand command)
     {
         var response = await _mediator.Send(command);
@@ -54,6 +57,7 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> Atualizar(long id, [FromBody] AlterarProdutoCommand command)
     {
         if (id != command.Id)
@@ -68,6 +72,7 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Gerente")]
     public async Task<IActionResult> Remover(long id)
     {
         var response = await _mediator.Send(new RemoverProdutoCommand { Id = id });

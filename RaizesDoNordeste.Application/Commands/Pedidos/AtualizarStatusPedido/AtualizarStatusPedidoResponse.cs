@@ -6,4 +6,5 @@ public class AtualizarStatusPedidoResponse
     public string StatusAnterior { get; set; } = string.Empty;
     public string StatusAtual { get; set; } = string.Empty;
     public DateTime DataAtualizacao { get; set; }
+    public int? PontosAcumulados { get; set; }
 }

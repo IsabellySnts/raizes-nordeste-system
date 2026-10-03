@@ -2,6 +2,7 @@
 using RaizesDoNordeste.Application.Commons;
 using RaizesDoNordeste.Domain.Aggregates;
 using RaizesDoNordeste.Domain.Entities;
+using RaizesDoNordeste.Domain.Enums;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Commands.Clientes.CriarCliente;
@@ -28,7 +29,7 @@ public class CriarClienteHandler(IClienteRepository _clienteRepository, IUsuario
             return ResultViewModel<CriarClienteResponse>.Error("Este email já está cadastrado.");
 
         var senhaHash = BCrypt.Net.BCrypt.HashPassword(command.Senha);
-        var usuario = new Usuario(command.Email, senhaHash);
+        var usuario = new Usuario(command.Email, senhaHash, PerfilUsuario.Cliente);
         var usuarioCriado = await _usuarioRepository.CriarAsync(usuario);
 
         var cliente = new Cliente(

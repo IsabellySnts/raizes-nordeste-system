@@ -6,6 +6,7 @@ using RaizesDoNordeste.Application.Commands.Campanhas.AtualizarCampanha;
 using RaizesDoNordeste.Application.Commands.Campanhas.CriarCampanha;
 using RaizesDoNordeste.Application.Queries.Campanhas.ObterCampanhaPorId;
 using RaizesDoNordeste.Application.Queries.Campanhas.ObterCampanhas;
+using Swashbuckle.AspNetCore.Annotations;
 
 
 namespace RaizesDoNordeste.API.Controllers;
@@ -13,10 +14,16 @@ namespace RaizesDoNordeste.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin,Gerente")]
+[SwaggerTag("Gerenciamento de campanhas promocionais")]
 
 public class CampanhaController(IMediator _mediator) : BaseController
 {
     [HttpPost]
+    [SwaggerOperation(Summary = "Criar campanha", Description = "Cadastra uma nova campanha promocional. Acesso restrito a Admin e Gerente.")]
+    [SwaggerResponse(201, "Campanha criada com sucesso")]
+    [SwaggerResponse(400, "Dados inválidos")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão (requer Admin ou Gerente)")]
     public async Task<IActionResult> Criar([FromBody] CriarCampanhaCommand command)
     {
         var response = await _mediator.Send(command);
@@ -28,6 +35,11 @@ public class CampanhaController(IMediator _mediator) : BaseController
     }
 
     [HttpGet("{id}")]
+    [SwaggerOperation(Summary = "Obter campanha por ID", Description = "Retorna os detalhes de uma campanha específica.")]
+    [SwaggerResponse(200, "Campanha encontrada")]
+    [SwaggerResponse(404, "Campanha não encontrada")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão")]
     public async Task<IActionResult> ObterPorId(long id)
     {
         var response = await _mediator.Send(new ObterCampanhaPorIdQuery { Id = id });
@@ -39,6 +51,11 @@ public class CampanhaController(IMediator _mediator) : BaseController
     }
 
     [HttpGet]
+    [SwaggerOperation(Summary = "Listar campanhas", Description = "Retorna todas as campanhas. Pode filtrar apenas as ativas.")]
+    [SwaggerResponse(200, "Lista de campanhas retornada com sucesso")]
+    [SwaggerResponse(400, "Erro na consulta")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão")]
     public async Task<IActionResult> ObterTodas([FromQuery] bool apenasAtivas = false)
     {
         var response = await _mediator.Send(new ObterCampanhasQuery { ApenasAtivas = apenasAtivas });
@@ -50,6 +67,11 @@ public class CampanhaController(IMediator _mediator) : BaseController
     }
 
     [HttpPut("{id}")]
+    [SwaggerOperation(Summary = "Atualizar campanha", Description = "Atualiza os dados de uma campanha existente. O ID da rota deve corresponder ao ID do corpo.")]
+    [SwaggerResponse(200, "Campanha atualizada com sucesso")]
+    [SwaggerResponse(400, "Dados inválidos ou IDs não correspondem")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão")]
     public async Task<IActionResult> Atualizar(long id, [FromBody] AtualizarCampanhaCommand command)
     {
         if (id != command.Id)
@@ -64,6 +86,11 @@ public class CampanhaController(IMediator _mediator) : BaseController
     }
 
     [HttpPatch("{id}/status")]
+    [SwaggerOperation(Summary = "Alterar status da campanha", Description = "Ativa ou desativa uma campanha promocional.")]
+    [SwaggerResponse(200, "Status alterado com sucesso")]
+    [SwaggerResponse(400, "Dados inválidos ou IDs não correspondem")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão")]
     public async Task<IActionResult> AlterarStatus(long id, [FromBody] AlterarStatusCampanhaCommand command)
     {
         if (id != command.Id)

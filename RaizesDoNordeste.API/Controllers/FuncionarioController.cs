@@ -7,16 +7,22 @@ using RaizesDoNordeste.Application.Commands.Funcionarios.CriarFuncionario;
 using RaizesDoNordeste.Application.Commands.Funcionarios.DesativarFuncionario;
 using RaizesDoNordeste.Application.Queries.Funcionarios.ObterFuncionarioPorId;
 using RaizesDoNordeste.Application.Queries.Funcionarios.ObterTodosFuncionarios;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace RaizesDoNordeste.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin")]
-
-public class FuncionarioController(IMediator _mediator): BaseController
+[SwaggerTag("Gerenciamento de funcionários da rede")]
+public class FuncionarioController(IMediator _mediator) : BaseController
 {
     [HttpPost]
+    [SwaggerOperation(Summary = "Cadastrar funcionário", Description = "Registra um novo funcionário vinculado a uma unidade. Acesso restrito a Admin.")]
+    [SwaggerResponse(201, "Funcionário cadastrado com sucesso")]
+    [SwaggerResponse(400, "Dados inválidos")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão (requer Admin)")]
     public async Task<IActionResult> Criar([FromBody] CriarFuncionarioCommand command)
     {
         var response = await _mediator.Send(command);
@@ -27,9 +33,14 @@ public class FuncionarioController(IMediator _mediator): BaseController
         return CreatedAtAction(nameof(ObterPorId), new { id = response.Data!.Id }, response.Data);
     }
 
-    [Authorize(Roles = "Admin,Gerente")]
     [HttpGet("{id}")]
-    public async Task<IActionResult> ObterPorId(long id)
+    [Authorize(Roles = "Admin,Gerente")]
+    [SwaggerOperation(Summary = "Obter funcionário por ID", Description = "Retorna os dados de um funcionário específico. Acesso para Admin e Gerente.")]
+    [SwaggerResponse(200, "Funcionário encontrado")]
+    [SwaggerResponse(404, "Funcionário não encontrado")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão")]
+    public async Task<IActionResult> ObterPorId([SwaggerParameter("ID do funcionário")] long id)
     {
         var response = await _mediator.Send(new ObterFuncionarioPorIdQuery { Id = id });
 
@@ -39,9 +50,15 @@ public class FuncionarioController(IMediator _mediator): BaseController
         return Ok(response.Data);
     }
 
-    [Authorize(Roles = "Admin,Gerente")]
     [HttpGet]
-    public async Task<IActionResult> ObterTodos([FromQuery] long? unidadeId)
+    [Authorize(Roles = "Admin,Gerente")]
+    [SwaggerOperation(Summary = "Listar funcionários", Description = "Retorna todos os funcionários. Pode filtrar por unidade.")]
+    [SwaggerResponse(200, "Lista de funcionários retornada com sucesso")]
+    [SwaggerResponse(400, "Erro na consulta")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão")]
+    public async Task<IActionResult> ObterTodos(
+        [FromQuery, SwaggerParameter("Filtrar por ID da unidade")] long? unidadeId)
     {
         var response = await _mediator.Send(new ObterTodosFuncionariosQuery { IdUnidade = unidadeId });
 
@@ -52,7 +69,14 @@ public class FuncionarioController(IMediator _mediator): BaseController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Atualizar(long id, [FromBody] AtualizarFuncionarioCommand command)
+    [SwaggerOperation(Summary = "Atualizar funcionário", Description = "Atualiza os dados de um funcionário existente. Acesso restrito a Admin.")]
+    [SwaggerResponse(200, "Funcionário atualizado com sucesso")]
+    [SwaggerResponse(400, "Dados inválidos ou IDs não correspondem")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão (requer Admin)")]
+    public async Task<IActionResult> Atualizar(
+        [SwaggerParameter("ID do funcionário")] long id,
+        [FromBody] AtualizarFuncionarioCommand command)
     {
         if (id != command.Id)
             return BadRequest(new { error = "O Id da rota não corresponde ao Id do corpo." });
@@ -66,7 +90,12 @@ public class FuncionarioController(IMediator _mediator): BaseController
     }
 
     [HttpPatch("{id}/desativar")]
-    public async Task<IActionResult> Desativar(long id)
+    [SwaggerOperation(Summary = "Desativar funcionário", Description = "Desativa um funcionário sem removê-lo do sistema. O funcionário não poderá mais acessar o sistema.")]
+    [SwaggerResponse(200, "Funcionário desativado com sucesso")]
+    [SwaggerResponse(400, "Erro ao desativar")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão (requer Admin)")]
+    public async Task<IActionResult> Desativar([SwaggerParameter("ID do funcionário")] long id)
     {
         var response = await _mediator.Send(new DesativarFuncionarioCommand { Id = id });
 
@@ -77,7 +106,12 @@ public class FuncionarioController(IMediator _mediator): BaseController
     }
 
     [HttpPatch("{id}/ativar")]
-    public async Task<IActionResult> Ativar(long id)
+    [SwaggerOperation(Summary = "Ativar funcionário", Description = "Reativa um funcionário previamente desativado, restaurando seu acesso ao sistema.")]
+    [SwaggerResponse(200, "Funcionário ativado com sucesso")]
+    [SwaggerResponse(400, "Erro ao ativar")]
+    [SwaggerResponse(401, "Não autenticado")]
+    [SwaggerResponse(403, "Sem permissão (requer Admin)")]
+    public async Task<IActionResult> Ativar([SwaggerParameter("ID do funcionário")] long id)
     {
         var response = await _mediator.Send(new AtivarFuncionarioCommand { Id = id });
 

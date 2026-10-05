@@ -1,9 +1,9 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.OpenApi;
 using RaizesDoNordeste.Application;
 using RaizesDoNordeste.Application.Commons.Behaviors;
 using RaizesDoNordeste.Infrastructure;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,40 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Rede Raízes do Nordeste API",
+        Version = "v1",
+        Description = "API para gerenciamento da rede de franquias Raízes do Nordeste — pedidos, cardápio, estoque, pagamentos (Stripe), programa de fidelidade e conformidade LGPD.",
+        Contact = new OpenApiContact
+        {
+            Name = "Isabelly dos Santos",
+            Email = "isabellydossantos112@gmail.com"
+        }
+    });
+
+    options.EnableAnnotations();
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT no formato: Bearer {seu_token}"
+    });
+
+    options.AddSecurityRequirement(document =>
+        new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        });
+});
+
+
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -38,8 +71,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseCors("Development");

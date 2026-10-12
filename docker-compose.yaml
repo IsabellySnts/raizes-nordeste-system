@@ -10,7 +10,7 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - sqlserver_data:/var/opt/lib/mssql
+      - sqlserver_data:/var/opt/mssql
 
   rabbitmq:
     image: rabbitmq:3-management

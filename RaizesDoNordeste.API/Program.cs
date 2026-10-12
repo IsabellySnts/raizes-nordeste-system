@@ -1,6 +1,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.OpenApi;
+using RaizesDoNordeste.API.Middlewares;
 using RaizesDoNordeste.Application;
 using RaizesDoNordeste.Application.Commons.Behaviors;
 using RaizesDoNordeste.Infrastructure;
@@ -66,6 +67,9 @@ builder.Services.AddMediatR(cfg =>
 
 builder.Services.AddValidatorsFromAssembly(
     typeof(RaizesDoNordeste.Application.Commons.ResultViewModel<>).Assembly);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 

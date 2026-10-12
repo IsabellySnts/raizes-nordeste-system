@@ -18,7 +18,7 @@ namespace RaizesDoNordeste.API.Controllers
     public class PedidoController(IMediator _mediator) : BaseController
     {
         [HttpPost]
-        [Authorize(Roles = "Admin,Gerente,Atendente")]
+        [Authorize(Roles = "Admin,Gerente,Atendente,Cliente")]
         [SwaggerOperation(
             Summary = "Criar pedido",
             Description = "Registra um novo pedido com os itens selecionados para uma unidade. O pedido é criado com status 'Pendente'.")]

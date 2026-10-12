@@ -48,14 +48,10 @@ public class CardapioRepository : ICardapioRepository
         var agora = DateTime.UtcNow;
 
         return await _context.Cardapios
-            .Include(c => c.Produto)
-                .ThenInclude(p => p!.Categoria)
-            .Where(c => c.IdUnidade == unidadeId
-                && c.Disponivel
-                && (!c.Produto!.FlagSazonal
-                    || (c.Produto.DataInicioDisponibilidade <= agora
-                        && c.Produto.DataFimDisponibilidade >= agora)))
-            .ToListAsync();
+             .Include(c => c.Produto)
+                 .ThenInclude(p => p!.Categoria)
+             .Where(c => c.IdUnidade == unidadeId && c.Disponivel)
+             .ToListAsync();
     }
 
     public async Task AtualizarAsync(Cardapio cardapio)

@@ -24,16 +24,11 @@ public class CategoriaController(IMediator _mediator) : BaseController
     [SwaggerResponse(403, "Sem permissão (requer Admin ou Gerente)")]
     public async Task<IActionResult> Criar([FromBody] CriarCategoriaCommand command)
     {
-        try
-        {
-            var response = await _mediator.Send(command);
-            return CreatedAtAction(nameof(Criar), new { id = response.Data?.IdCategoria }, response);
-        }
-        catch (FluentValidation.ValidationException ex)
-        {
-            var erros = ex.Errors.Select(e => e.ErrorMessage).ToList();
-            return BadRequest(new { errors = erros });
-        }
+        var response = await _mediator.Send(command);
+        if (!response.IsSuccess)
+            return BadRequest(new { errors = response.Message });
+
+        return Ok(response.Data);
     }
 
     [HttpGet("{id}")]

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using RaizesDoNordeste.Application.Commons;
+using RaizesDoNordeste.Domain.Enums;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Queries.Clientes.ObterClientePorId;
@@ -12,7 +13,10 @@ public class ObterClientePorIdHandler(IClienteRepository _repository) : IRequest
         var cliente = await _repository.ObterPorIdComUsuarioAsync(query.Id);
 
         if (cliente == null)
-            return ResultViewModel<ClienteQueryResponse>.Error("Cliente não encontrado.");
+            return ResultViewModel<ClienteQueryResponse>.Error("Cliente não encontrado.", ResultStatus.NotFound);
+
+        if (query.PerfilLogado == PerfilUsuario.Cliente && cliente.IdUsuario != query.IdUsuarioLogado)
+            return ResultViewModel<ClienteQueryResponse>.Error("Você não tem permissão para consultar este cliente.", ResultStatus.Forbidden);
 
         var response = new ClienteQueryResponse
         {

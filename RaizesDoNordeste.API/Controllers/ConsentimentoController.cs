@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaizesDoNordeste.Application.Commands.Consentimento.RegistrarConsentimento;
 using RaizesDoNordeste.Application.Commands.Consentimento.RevogarConsentimento;
-using RaizesDoNordeste.Application.Queries.ConsentimentoLGPD.ObterConsentimentoCliente;
+using RaizesDoNordeste.Application.Queries.Consentimento.ObterConsentimentoCliente;
 using RaizesDoNordeste.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace RaizesDoNordeste.API.Controllers;
 
@@ -16,7 +17,7 @@ public class ConsentimentoController(IMediator _mediator) : BaseController
 {
     [HttpPost]
     [Authorize(Roles = "Admin,Cliente")]
-    [SwaggerOperation(Summary = "Registrar consentimento", Description = "Registra um consentimento LGPD para o cliente (ex: Dados Pessoais, Termos de Uso, Marketing).")]
+    [SwaggerOperation(Summary = "Registrar consentimento", Description = "Registra um consentimento LGPD para o cliente (ex: Marketing = 1, Dados Pessoais = 2, Fidelizacao = 3... ).")]
     [SwaggerResponse(201, "Consentimento registrado com sucesso")]
     [SwaggerResponse(400, "Dados inválidos ou IDs não correspondem")]
     public async Task<IActionResult> Registrar(
@@ -26,28 +27,56 @@ public class ConsentimentoController(IMediator _mediator) : BaseController
         if (clienteId != command.IdCliente)
             return BadRequest(new { error = "O Id da rota não corresponde ao Id do corpo." });
 
+        var idUsuarioLogado = long.Parse(User.FindFirst("userId")!.Value);
+        var perfilLogado = Enum.Parse<PerfilUsuario>(User.FindFirst(ClaimTypes.Role)!.Value);
+
+        command = command with { IdUsuarioLogado = idUsuarioLogado, PerfilLogado = perfilLogado };
+
         var response = await _mediator.Send(command);
 
         if (!response.IsSuccess)
-            return BadRequest(new { error = response.Message });
+        {
+            return response.Status switch
+            {
+                ResultStatus.NotFound => NotFound(new { error = response.Message }),
+                ResultStatus.Forbidden => StatusCode(403, new { error = response.Message }),
+                _ => BadRequest(new { error = response.Message })
+            };
+        }
 
         return CreatedAtAction(nameof(ObterPorCliente), new { clienteId }, response.Data);
     }
 
     [HttpGet]
     [Authorize(Roles = "Admin,Cliente")]
-    [SwaggerOperation(Summary = "Consultar consentimentos do cliente", Description = "Retorna todos os consentimentos LGPD registrados para um cliente. Acesso restrito a Admin e ao próprio Cliente.")]
+    [SwaggerOperation(Summary = "Consultar consentimentos do cliente", Description = "Retorna todos os consentimentos LGPD registrados para um cliente. Clientes só podem consultar seus próprios consentimentos.")]
     [SwaggerResponse(200, "Consentimentos retornados com sucesso")]
-    [SwaggerResponse(400, "Erro na consulta")]
     [SwaggerResponse(401, "Não autenticado")]
-    [SwaggerResponse(403, "Sem permissão (requer Admin ou Cliente)")]
-    public async Task<IActionResult> ObterPorCliente(
-        [SwaggerParameter("ID do cliente")] long clienteId)
+    [SwaggerResponse(403, "Sem permissão para consultar consentimentos de outro cliente")]
+    [SwaggerResponse(404, "Cliente não encontrado")]
+    public async Task<IActionResult> ObterPorCliente([SwaggerParameter("ID do cliente")] long clienteId)
     {
-        var response = await _mediator.Send(new ObterConsentimentosClienteQuery { IdCliente = clienteId });
+        var idUsuarioLogado = long.Parse(User.FindFirst("userId")!.Value);
+        var perfilLogado = Enum.Parse<PerfilUsuario>(User.FindFirst(ClaimTypes.Role)!.Value);
+
+        var query = new ObterConsentimentosClienteQuery
+        {
+            IdCliente = clienteId,
+            IdUsuarioLogado = idUsuarioLogado,
+            PerfilLogado = perfilLogado
+        };
+
+        var response = await _mediator.Send(query);
 
         if (!response.IsSuccess)
-            return BadRequest(new { error = response.Message });
+        {
+            return response.Status switch
+            {
+                ResultStatus.NotFound => NotFound(new { error = response.Message }),
+                ResultStatus.Forbidden => StatusCode(403, new { error = response.Message }),
+                _ => BadRequest(new { error = response.Message })
+            };
+        }
 
         return Ok(response.Data);
     }
@@ -63,10 +92,15 @@ public class ConsentimentoController(IMediator _mediator) : BaseController
         [SwaggerParameter("ID do cliente")] long clienteId,
         [SwaggerParameter("Tipo do consentimento a revogar")] TipoConsentimento permissao)
     {
+        var idUsuarioLogado = long.Parse(User.FindFirst("userId")!.Value);
+        var perfilLogado = Enum.Parse<PerfilUsuario>(User.FindFirst(ClaimTypes.Role)!.Value);
+
         var response = await _mediator.Send(new RevogarConsentimentoCommand
         {
             IdCliente = clienteId,
-            Permissao = permissao
+            Permissao = permissao,
+            IdUsuarioLogado = idUsuarioLogado,
+            PerfilLogado = perfilLogado
         });
 
         if (!response.IsSuccess)

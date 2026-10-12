@@ -34,6 +34,18 @@ public class CriarClienteHandler(IClienteRepository _clienteRepository, IUsuario
 
         var clienteCriado = await _clienteRepository.CriarAsync(cliente);
 
+        foreach (var c in command.Consentimentos)
+        {
+            var consentimento = new ConsentimentoLGPD(
+                clienteCriado.Id,
+                c.Permissao
+            );
+
+            clienteCriado.Consentimentos.Add(consentimento);
+        }
+
+        await _clienteRepository.AtualizarAsync(clienteCriado);
+
         var response = new CriarClienteResponse
         {
             Id = clienteCriado.Id,
@@ -41,7 +53,12 @@ public class CriarClienteHandler(IClienteRepository _clienteRepository, IUsuario
             Email = clienteCriado.Email,
             Telefone = clienteCriado.Telefone,
             DataNascimento = clienteCriado.DataNascimento,
-            DataCadastro = clienteCriado.DataCadastro
+            DataCadastro = clienteCriado.DataCadastro,
+            Consentimentos = clienteCriado.Consentimentos.Select(c => new ConsentimentoResponse
+            {
+                Permissao = c.Permissao.ToString(),
+                Aceite = c.Aceite
+            }).ToList()
         };
 
         return ResultViewModel<CriarClienteResponse>.Success(response);

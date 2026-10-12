@@ -6,7 +6,9 @@ using RaizesDoNordeste.Application.Commands.Clientes.AtualizarCliente;
 using RaizesDoNordeste.Application.Commands.Clientes.CriarCliente;
 using RaizesDoNordeste.Application.Queries.Clientes.ObterClientePorId;
 using RaizesDoNordeste.Application.Queries.Clientes.ObterTodosClientes;
+using RaizesDoNordeste.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace RaizesDoNordeste.API.Controllers;
 
@@ -46,10 +48,27 @@ public class ClienteController : BaseController
     [SwaggerResponse(403, "Sem permissão")]
     public async Task<IActionResult> ObterPorId([SwaggerParameter("ID do cliente")] long id)
     {
-        var response = await _mediator.Send(new ObterClientePorIdQuery { Id = id });
+        var idUsuarioLogado = long.Parse(User.FindFirst("userId")!.Value);
+        var perfilLogado = Enum.Parse<PerfilUsuario>(User.FindFirst(ClaimTypes.Role)!.Value);
+
+        var query = new ObterClientePorIdQuery
+        {
+            Id = id,
+            IdUsuarioLogado = idUsuarioLogado,
+            PerfilLogado = perfilLogado
+        };
+
+        var response = await _mediator.Send(query);
 
         if (!response.IsSuccess)
-            return NotFound(new { error = response.Message });
+        {
+            return response.Status switch
+            {
+                ResultStatus.NotFound => NotFound(new { error = response.Message }),
+                ResultStatus.Forbidden => StatusCode(403, new { error = response.Message }),
+                _ => BadRequest(new { error = response.Message })
+            };
+        }
 
         return Ok(response.Data);
     }
@@ -72,18 +91,23 @@ public class ClienteController : BaseController
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin,Gerente, Cliente")]
-    [SwaggerOperation(Summary = "Atualizar cliente", Description = "Atualiza os dados de um cliente existente.")]
+    [Authorize(Roles = "Admin,Gerente,Cliente")]
+    [SwaggerOperation(Summary = "Atualizar cliente", Description = "Atualiza os dados de um cliente existente. Clientes só podem atualizar seus próprios dados.")]
     [SwaggerResponse(200, "Cliente atualizado com sucesso")]
     [SwaggerResponse(400, "Dados inválidos ou IDs não correspondem")]
     [SwaggerResponse(401, "Não autenticado")]
-    [SwaggerResponse(403, "Sem permissão (requer Admin ou Gerente)")]
+    [SwaggerResponse(403, "Sem permissão")]
     public async Task<IActionResult> Atualizar(
         [SwaggerParameter("ID do cliente")] long id,
         [FromBody] AtualizarClienteCommand command)
     {
         if (id != command.Id)
             return BadRequest(new { error = "O Id da rota não corresponde ao Id do corpo." });
+
+        var idUsuarioLogado = long.Parse(User.FindFirst("userId")!.Value);
+        var perfilLogado = Enum.Parse<PerfilUsuario>(User.FindFirst(ClaimTypes.Role)!.Value);
+
+        command = command with { IdUsuarioLogado = idUsuarioLogado, PerfilLogado = perfilLogado };
 
         var response = await _mediator.Send(command);
 

@@ -42,4 +42,10 @@ public class CategoriaRepository(RaizesDoNordesteDbContext dbContext) : ICategor
     {
         return await _dbContext.Produtos.AnyAsync(p => p.IdCategoria == categoriaId);
     }
+
+    public async Task<bool> NomeExisteAsync(string nome, long? ignorarId = null)
+    {
+        return await _dbContext.Categorias
+            .AnyAsync(c => c.Nome == nome && (!ignorarId.HasValue || c.Id != ignorarId.Value));
+    }
 }

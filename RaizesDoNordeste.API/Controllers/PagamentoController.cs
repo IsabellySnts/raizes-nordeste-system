@@ -32,26 +32,6 @@ public class PagamentoController(IMediator _mediator, IPagamentoService _pagamen
         return Ok(resultado.Data);
     }
 
-    [HttpPost("webhook")]
-    [AllowAnonymous]
-    [SwaggerOperation(
-        Summary = "Webhook do Stripe",
-        Description = "Endpoint chamado automaticamente pelo Stripe para notificar eventos de pagamento (payment_intent.succeeded, payment_intent.payment_failed). Não deve ser chamado manualmente.")]
-    [SwaggerResponse(200, "Evento processado com sucesso")]
-    [SwaggerResponse(400, "Assinatura inválida ou erro no processamento")]
-    public async Task<IActionResult> Webhook()
-    {
-        var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-        var signature = Request.Headers["Stripe-Signature"].ToString();
-
-        var resultado = await _pagamentoService.ProcessarWebhookAsync(json, signature);
-
-        if (!resultado.IsSuccess)
-            return BadRequest(new { error = resultado.Message });
-
-        return Ok();
-    }
-
     [HttpGet("pedido/{idPedido}")]
     [Authorize(Roles = "Admin,Gerente,Atendente,Cliente")]
     [SwaggerOperation(

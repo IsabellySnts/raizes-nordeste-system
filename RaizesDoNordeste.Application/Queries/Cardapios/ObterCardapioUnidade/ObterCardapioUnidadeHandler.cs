@@ -20,6 +20,7 @@ public class ObterCardapioUnidadeHandler(
             ? await _cardapioRepository.ObterDisponivelPorUnidadeAsync(query.IdUnidade)
             : await _cardapioRepository.ObterPorUnidadeAsync(query.IdUnidade);
 
+
         var response = itens.Select(c => new CardapioQueryResponse
         {
             Id = c.Id,

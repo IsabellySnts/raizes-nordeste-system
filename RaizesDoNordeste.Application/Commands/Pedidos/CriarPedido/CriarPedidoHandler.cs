@@ -11,7 +11,8 @@ namespace RaizesDoNordeste.Application.Commands.Pedidos.CriarPedido;
 public class CriarPedidoHandler(
     IPedidoRepository _pedidoRepository,
     IUnidadeRepository _unidadeRepository,
-    IPedidoService _pedidoService)
+    IPedidoService _pedidoService,
+    IFidelidadeRepository _fidelidadeRepository)
     : IRequestHandler<CriarPedidoCommand, ResultViewModel<CriarPedidoResponse>>
 {
     public async Task<ResultViewModel<CriarPedidoResponse>> Handle(CriarPedidoCommand command, CancellationToken cancellationToken)
@@ -74,6 +75,24 @@ public class CriarPedidoHandler(
         for (int i = 0; i < itensResponse.Count; i++)
             itensResponse[i].Id = pedidoCriado.Itens.ElementAt(i).Id;
 
+        int pontosAcumulados = 0;
+
+        if (command.IdCliente.HasValue)
+        {
+            var fidelidade = await _fidelidadeRepository.ObterPorClienteIdAsync(command.IdCliente.Value);
+
+            if (fidelidade != null)
+            {
+                pontosAcumulados = (int)Math.Floor(pedidoCriado.ValorTotal);
+
+                if (pontosAcumulados > 0)
+                {
+                    fidelidade.AcumularPontos(pontosAcumulados, pedidoCriado.Id);
+                    await _fidelidadeRepository.AtualizarAsync(fidelidade);
+                }
+            }
+        }
+
         var response = new CriarPedidoResponse
         {
             Id = pedidoCriado.Id,
@@ -85,6 +104,7 @@ public class CriarPedidoHandler(
             ValorTotal = pedidoCriado.ValorTotal,
             ValorDesconto = valorDesconto,
             PontosResgatados = pontosResgatados,
+            PontosAcumulados = pontosAcumulados,
             DataCriacao = pedidoCriado.DataCriacao,
             Itens = itensResponse
         };

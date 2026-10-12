@@ -13,16 +13,17 @@ public class ConsentimentoLGPD : BaseEntity
 
     protected ConsentimentoLGPD() { }
 
-    public ConsentimentoLGPD(long idCliente, TipoConsentimento permissao, bool aceite)
+    public ConsentimentoLGPD(long idCliente, TipoConsentimento permissao)
     {
         IdCliente = idCliente;
         Permissao = permissao;
-        Aceite = aceite;
-        Data = DateTime.UtcNow;
+        Aceite = true;
+        Data = DateTime.Now;
     }
 
     public void Revogar()
     {
-        Data = DateTime.UtcNow;
+        Aceite = false;
+        Data = DateTime.Now;
     }
 }

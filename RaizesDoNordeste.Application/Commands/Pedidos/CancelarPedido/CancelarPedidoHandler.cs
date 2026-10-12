@@ -31,7 +31,7 @@ public class CancelarPedidoHandler(
         var statusAnterior = pedido.Status.ToString();
 
         if (command.CanceladoPeloCliente && !pedido.PodeCancelarPeloCliente())
-            return ResultViewModel<CancelarPedidoResponse>.Error("O pedido já está em preparo ou em etapa posterior. Apenas o gerente pode cancelar.");
+            return ResultViewModel<CancelarPedidoResponse>.Error("O pedido já está em preparo ou em etapa posterior.");
 
         var cancelou = pedido.AtualizarStatus(StatusPedido.Cancelado);
         if (!cancelou)

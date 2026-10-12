@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using RaizesDoNordeste.Application.Commons;
+using RaizesDoNordeste.Domain.Enums;
 using RaizesDoNordeste.Domain.Interfaces.Repositories;
 
 namespace RaizesDoNordeste.Application.Commands.Clientes.AtualizarCliente;
@@ -19,9 +20,12 @@ public class AtualizarClienteHandler(IClienteRepository _clienteRepository)
             return ResultViewModel<AtualizarClienteResponse>.Error(erros);
         }
 
-        var cliente = await _clienteRepository.ObterPorIdAsync(command.Id);
+        var cliente = await _clienteRepository.ObterPorIdComUsuarioAsync(command.Id);
         if (cliente == null)
             return ResultViewModel<AtualizarClienteResponse>.Error("Cliente não encontrado.");
+
+        if (command.PerfilLogado == PerfilUsuario.Cliente && cliente.IdUsuario != command.IdUsuarioLogado)
+            return ResultViewModel<AtualizarClienteResponse>.Error("Você não tem permissão para atualizar este cliente.");
 
         var emailExiste = await _clienteRepository.EmailExisteAsync(command.Email, command.Id);
         if (emailExiste)

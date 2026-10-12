@@ -1,4 +1,4 @@
-﻿namespace RaizesDoNordeste.Application.Queries.ConsentimentoLGPD.ObterConsentimentoCliente;
+﻿namespace RaizesDoNordeste.Application.Queries.Consentimento.ObterConsentimentoCliente;
 
 public class ConsentimentoQueryResponse
 {

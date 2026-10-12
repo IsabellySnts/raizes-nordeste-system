@@ -10,4 +10,5 @@ public interface ICategoriaRepository
     Task AtualizarAsync(Categoria categoria);
     Task RemoverAsync(Categoria categoria);
     Task<bool> PossuiProdutosVinculadosAsync(long categoriaId);
+    Task<bool> NomeExisteAsync(string nome, long? ignorarId = null);
 }

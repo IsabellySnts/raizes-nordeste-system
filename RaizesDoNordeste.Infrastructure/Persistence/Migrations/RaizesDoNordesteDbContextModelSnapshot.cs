@@ -103,6 +103,9 @@ namespace RaizesDoNordeste.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<decimal>("ValorDesconto")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(10,2)");
 

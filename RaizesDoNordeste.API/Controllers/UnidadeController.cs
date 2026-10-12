@@ -42,7 +42,7 @@ public class UnidadeController : BaseController
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,Gerente, Cliente, Atendente")]
+    [Authorize(Roles = "Admin,Gerente,Cliente,Atendente")]
     [SwaggerOperation(
         Summary = "Obter unidade por ID",
         Description = "Retorna os dados de uma unidade específica da rede.")]
@@ -60,7 +60,7 @@ public class UnidadeController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin,Gerente, Cliente, Atendente")]
+    [Authorize(Roles = "Admin,Gerente,Cliente,Atendente")]
     [SwaggerOperation(
         Summary = "Listar todas as unidades",
         Description = "Retorna a lista completa de unidades da rede.")]

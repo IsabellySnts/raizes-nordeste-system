@@ -13,6 +13,7 @@ public class CriarPedidoResponse
     public List<ItemPedidoResponse> Itens { get; set; } = new();
     public decimal ValorDesconto { get; set; }
     public int PontosResgatados { get; set; }
+    public int PontosAcumulados { get; set; }
 }
 
 public class ItemPedidoResponse

@@ -86,7 +86,7 @@ public class CampanhaController(IMediator _mediator) : BaseController
     }
 
     [HttpPatch("{id}/status")]
-    [SwaggerOperation(Summary = "Alterar status da campanha", Description = "Ativa ou desativa uma campanha promocional.")]
+    [SwaggerOperation(Summary = "Alterar status da campanha", Description = "Ativa, desativa ou encerra uma campanha promocional. 1 = Ativa; 2 = Inativa; 3 = Encerrada")]
     [SwaggerResponse(200, "Status alterado com sucesso")]
     [SwaggerResponse(400, "Dados inválidos ou IDs não correspondem")]
     [SwaggerResponse(401, "Não autenticado")]

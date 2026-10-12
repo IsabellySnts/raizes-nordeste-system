@@ -75,6 +75,40 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+
+        if (exception is ValidationException validationEx)
+        {
+            context.Response.StatusCode = 400;
+            context.Response.ContentType = "application/json";
+
+            var erros = string.Join("; ", validationEx.Errors.Select(e => e.ErrorMessage));
+
+            await context.Response.WriteAsJsonAsync(new
+            {
+                isSuccess = false,
+                message = erros,
+                status = "ValidationError"
+            });
+            return;
+        }
+
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            isSuccess = false,
+            message = "Erro interno do servidor.",
+            status = "ValidationError"
+        });
+    });
+});
+
 app.UseCors("Development");
 
 app.UseAuthentication();

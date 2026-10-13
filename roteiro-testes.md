@@ -18,8 +18,7 @@
 }
 ```
 
-> **Nota:** Este é o primeiro usuário do sistema. Como não há Admin ainda, esse endpoint deve permitir a criação inicial. Caso exija autenticação, verifique se há seed de Admin no banco.
-
+> **Nota:** O primeiro usuário Admin é criado automaticamente via seed no banco de dados (admin@raizes.com / Admin@123). A partir dele, novos usuários podem ser cadastrados via endpoint autenticado.
 ---
 
 ## 2. Login como Admin

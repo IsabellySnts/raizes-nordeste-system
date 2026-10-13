@@ -648,6 +648,15 @@ namespace RaizesDoNordeste.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Email = "admin@raizes.com",
+                            Perfil = "Admin",
+                            Senha = "$2a$11$aWrp/ZZRphVGWbFrKyQdaORQcQJckoioQ224hS0UN/qfzljlzZyDG"
+                        });
                 });
 
             modelBuilder.Entity("RaizesDoNordeste.Domain.Aggregates.Cliente", b =>

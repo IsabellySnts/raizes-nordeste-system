@@ -1,0 +1,755 @@
+{
+  "info": {
+    "_postman_id": "f5792b71-dc11-4690-be1e-24be3972d8cd",
+    "name": "Raizes do Nordeste API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39520213"
+  },
+  "item": [
+    {
+      "name": "Login Usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var res = pm.response.json();\r\npm.environment.set(\"token\", res.data.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin@raizes.com\",\r\n  \"senha\": \"Admin@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7105/api/Usuario/login",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7105",
+          "path": [
+            "api",
+            "Usuario",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Usuario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"gerente@raizes.com\",\r\n    \"senha\": \"Gerente@123\",\r\n    \"confirmarSenha\": \"Gerente@123\",\r\n    \"perfil\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Usuario",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Usuario"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar unidade",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"Raízes - Centro Recife\",\r\n    \"cidade\": \"Recife\",\r\n    \"estado\": \"PE\",\r\n    \"pais\": \"Brasil\",\r\n    \"logradouro\": \"Rua do Bom Jesus, 150\",\r\n    \"tipoCozinha\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Unidade",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Unidade"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Produto",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Baião de Dois\",\r\n  \"idCategoria\": 1,\r\n  \"descricao\": \"Arroz com feijão-de-corda, queijo coalho, nata e charque\",\r\n  \"preco\": 28.90,\r\n  \"flagSazonal\": false,\r\n  \"dataInicioDisponibilidade\": null,\r\n  \"dataFimDisponibilidade\": null,\r\n  \"foto\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Produtos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Produtos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Vincular produto ao cardapio",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"idUnidade\": 1,\r\n  \"idProduto\": 1,\r\n  \"disponivel\": true,\r\n  \"precoLocal\": 28.90,\r\n  \"variacaoRegional\": \"Versão original pernambucana\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Cardapio?unidadeId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Cardapio"
+          ],
+          "query": [
+            {
+              "key": "unidadeId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar categoria",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"Prato Principal\",\r\n    \"descricao\": \"Pratos típicos nordestinos servidos como refeição completa\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Categoria",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Categoria"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar cliente",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nomeCompleto\": \"Maria Silva Santos\",\r\n  \"cpf\": \"12345678901\",\r\n  \"telefone\": \"81999998888\",\r\n  \"email\": \"maria@email.com\",\r\n  \"dataNascimento\": \"1995-06-15T00:00:00Z\",\r\n  \"senha\": \"Maria@123\",\r\n  \"confirmarSenha\": \"Maria@123\",\r\n  \"consentimentos\": [\r\n    {\r\n      \"permissao\": 1,\r\n      \"aceite\": true\r\n    },\r\n    {\r\n      \"permissao\": 2,\r\n      \"aceite\": true\r\n    },\r\n    {\r\n      \"permissao\": 6,\r\n      \"aceite\": true\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Cliente",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Cliente"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Pedido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"idCliente\": 1,\r\n    \"idUnidade\": 1,\r\n    \"idFuncionario\": null,\r\n    \"canalOrigem\": 1,\r\n    \"itens\": [\r\n        {\r\n            \"idProduto\": 1,\r\n            \"quantidade\": 2,\r\n            \"observacao\": \"Sem coentro\"\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Pedido",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Pedido"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Estoque",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"idUnidade\": 1,\r\n  \"idProduto\": 1,\r\n  \"quantidade\": 50,\r\n  \"quantidadeMinima\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Estoque?unidadeId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Estoque"
+          ],
+          "query": [
+            {
+              "key": "unidadeId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Pagamento",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"idPedido\": 2,\r\n    \"tipoPagamento\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Pagamento",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Pagamento"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirmar Pagamento",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Pagamento/1/confirmar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Pagamento",
+            "1",
+            "confirmar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizar status do pedido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"idPedido\": 2,\r\n    \"novoStatus\": 4\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Pedido/2/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Pedido",
+            "2",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Aderir ao programa fidelidade",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Fidelidade/aderir?clienteId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Fidelidade",
+            "aderir"
+          ],
+          "query": [
+            {
+              "key": "clienteId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Consentimento",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"idCliente\": 1,\r\n    \"permissao\": 3\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Consentimento?clienteId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Consentimento"
+          ],
+          "query": [
+            {
+              "key": "clienteId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Revogar Consentimento",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Consentimento/3?clienteId=1&permissao&=3",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Consentimento",
+            "3"
+          ],
+          "query": [
+            {
+              "key": "clienteId",
+              "value": "1"
+            },
+            {
+              "key": "permissao",
+              "value": ""
+            },
+            {
+              "key": "",
+              "value": "3"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar saldo de fidelidade",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Fidelidade?clienteId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Fidelidade"
+          ],
+          "query": [
+            {
+              "key": "clienteId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Funcionario",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Maria da Silva\",\r\n  \"cpf\": \"98765432100\",\r\n  \"email\": \"maria@raizes.com\",\r\n  \"telefone\": \"81999998888\",\r\n  \"idUnidade\": 1,\r\n  \"cargo\": 2,\r\n  \"senha\": \"Func@123\",\r\n  \"confirmarSenha\": \"Func@123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Funcionario",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Funcionario"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar cardápio disponivel",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Cardapio?unidadeId=1&apenasDisponiveis=true",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Cardapio"
+          ],
+          "query": [
+            {
+              "key": "unidadeId",
+              "value": "1"
+            },
+            {
+              "key": "apenasDisponiveis",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar Pagamento",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/Pagamento/pedido/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Pagamento",
+            "pedido",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Campanha",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Sabores do São João\",\r\n  \"descricao\": \"Campanha junina com pratos típicos do Nordeste e descontos especiais\",\r\n  \"criterios\": \"Válido para pedidos acima de R$30,00 em qualquer unidade\",\r\n  \"dataInicio\": \"2026-10-12T00:00:00Z\",\r\n  \"dataFim\": \"2026-11-12T23:59:59Z\",\r\n  \"beneficio\": \"15% de desconto em pratos sazonais\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/Campanha",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "Campanha"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -2,6 +2,7 @@
 using RaizesDoNordeste.Domain.Aggregates;
 using RaizesDoNordeste.Domain.Entities;
 using RaizesDoNordeste.Infrastructure.Security;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace RaizesDoNordeste.Infrastructure;
 
@@ -24,6 +25,12 @@ public class RaizesDoNordesteDbContext : DbContext
     public DbSet<Campanha> Campanhas { get; set; }
     public DbSet<Auditoria> Auditorias { get; set; }
     public DbSet<ConsentimentoLGPD> Consentimentos { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(w =>
+            w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -196,6 +203,7 @@ public class RaizesDoNordesteDbContext : DbContext
             e.Property(x => x.ValorTotal).IsRequired().HasColumnType("decimal(10,2)");
             e.Property(x => x.DataCriacao).IsRequired();
             e.Property(x => x.DataAtualizacao).IsRequired();
+            e.Property(x => x.ValorDesconto).HasColumnType("decimal(10,2)");
 
             e.HasOne(x => x.Unidade)
                 .WithMany(x => x.Pedidos)
@@ -316,6 +324,14 @@ public class RaizesDoNordesteDbContext : DbContext
             e.Property(x => x.Beneficio).HasMaxLength(200);
         });
 
+
+        builder.Entity<Usuario>().HasData(new
+        {
+            Id = (long)1,
+            Email = "admin@raizes.com",
+            Senha = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+            Perfil = Domain.Enums.PerfilUsuario.Admin
+        });
 
         base.OnModelCreating(builder);
     }

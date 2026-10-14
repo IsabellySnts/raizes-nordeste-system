@@ -14,7 +14,7 @@ Sistema back-end para gerenciamento de uma rede de franquias de culinaria nordes
 - **Autenticacao:** JWT Bearer Tokens
 - **Validacao:** FluentValidation + ValidationBehavior (pipeline MediatR)
 - **Pagamentos:** Stripe (PaymentIntent API)
-- **Mensageria:** RabbitMQ (infraestrutura provisionada)
+- **Mensageria:** RabbitMQ (implementação futura)
 - **Documentacao:** Swagger / OpenAPI
 
 ---
@@ -121,6 +121,19 @@ dotnet run --project RaizesDoNordeste.API
 
 A API estara disponivel automaticamente no Swagger.
 
+### 7. Executar o roteiro de testes
+
+Consulte o arquivo roteiro-testes.md na raiz do repositório para um fluxo completo de validação. A ordem recomendada é:
+1. Login com Admin
+2. Criar Unidade -> Categoria -> Produto -> Cardapio -> Estoque
+3. Criar Funcionário
+4. Cadastrar Cliente -> Login
+5. Criar Pedido -> Pagamento -> Confirmar -> Atualizar status até Entregue
+6. Verificar acumulo de pontos de fidelidade
+7. Testes de erro: validação (400), sem token (401), sem permissão (403), não encontrado (404)
+
+> Todos os payloads JSON necessários estão no roteiro de testes
+
 ---
 
 ## Autenticacao
@@ -203,7 +216,7 @@ Para acessar endpoints protegidos:
 O arquivo `roteiro-testes.md` contem um fluxo completo e sequencial para validacao do sistema, desde a criacao do primeiro usuario ate os testes de tratamento de erros. Inclui todos os payloads JSON necessarios.
 
 **Fluxo critico testado:**
-1. Criar Admin -> Login -> Criar Unidade -> Categoria -> Produto -> Cardapio -> Estoque
+1. Login com Admin -> Criar Unidade -> Categoria -> Produto -> Cardapio -> Estoque
 2. Criar Funcionario -> Cadastrar Cliente -> Login Cliente
 3. Criar Pedido -> Pagamento (Stripe) -> Confirmar -> Atualizar Status ate Entregue
 4. Verificar acumulo de pontos de fidelidade

@@ -44,12 +44,20 @@ RaizesDoNordeste/
 
 Abra o terminal e execute:
 
+```bash
 git --version
+```
+```bash
 dotnet --version
+```
+```bash
 docker --version
+```
+```bash
 docker compose version
+```
 
-O comando dotnet --version deve retornar uma versão compatível com o .NET 10. O Docker Desktop também precisa estar aberto e funcionando.
+O comando dotnet --version deve retornar uma versão compatível com o .NET 10. O Docker Desktop também precisa estar aberto e funcionando antes de prosseguir para os próximos passos.
 
 ## Como Executar
 
@@ -106,9 +114,10 @@ A API estara disponivel em: `https://localhost:7XXX/swagger` (a porta exata apar
 
 ## Autenticacao
 
-A API utiliza JWT Bearer Token. Para acessar endpoints protegidos:
+A API utiliza JWT Bearer Token. Um usuário admin é gerado automaticamente pelo seed ao executar as migrations.
+Para acessar endpoints protegidos:
 
-1. Crie um usuario via `POST /api/Usuario`
+1. Use as credenciais: `Email: admin@raizes.com` e `Senha: Admin@123`
 2. Faca login via `POST /api/Usuario/login`
 3. Copie o token retornado
 4. No Swagger, clique no cadeado "Authorize" e insira: `Bearer {seu_token}`
@@ -180,7 +189,7 @@ A API utiliza JWT Bearer Token. Para acessar endpoints protegidos:
 
 ## Roteiro de Testes
 
-O arquivo `roteiro-testes.md` contem um fluxo completo e sequencial com 20 passos para validacao do sistema, desde a criacao do primeiro usuario ate os testes de tratamento de erros. Inclui todos os payloads JSON necessarios.
+O arquivo `roteiro-testes.md` contem um fluxo completo e sequencial para validacao do sistema, desde a criacao do primeiro usuario ate os testes de tratamento de erros. Inclui todos os payloads JSON necessarios.
 
 **Fluxo critico testado:**
 1. Criar Admin -> Login -> Criar Unidade -> Categoria -> Produto -> Cardapio -> Estoque

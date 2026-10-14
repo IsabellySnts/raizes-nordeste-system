@@ -37,9 +37,19 @@ RaizesDoNordeste/
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- Visual Studio 2022+ ou VS Code com extensao C#
+- [Visual Studio 2022+](https://visualstudio.microsoft.com/pt-br/downloads/) ou VS Code com extensao C#
 
 ---
+## Verificar as instalações
+
+Abra o terminal e execute:
+
+git --version
+dotnet --version
+docker --version
+docker compose version
+
+O comando dotnet --version deve retornar uma versão compatível com o .NET 10. O Docker Desktop também precisa estar aberto e funcionando.
 
 ## Como Executar
 
@@ -60,14 +70,31 @@ Isso inicia:
 - **SQL Server** na porta `1433` (usuario: `sa`, senha: `Raizes@2026!`)
 - **RabbitMQ** na porta `5672` (management: `http://localhost:15672`, usuario: `admin`, senha: `admin`)
 
-### 3. Aplicar as migrations (criar o banco)
+Para verificar se os containers estão em execução:
+```bash
+docker compose ps
+```
+### 3. Instalar a ferramenta de migrations
+
+O Entity Framework Core utiliza a ferramenta dotnet-ef para executar migrations e atualizar o banco de dados.
+
+Caso ainda não esteja instalada, execute:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+Verifique a instalação:
+```bash
+dotnet ef --version
+```
+
+### 4. Aplicar as migrations (criar o banco)
 
 ```bash
 cd RaizesDoNordeste.API
 dotnet ef database update --project ..\RaizesDoNordeste.Infrastructure
 ```
-
-### 4. Executar a API
+### 5. Executar a API
 
 ```bash
 dotnet run --project RaizesDoNordeste.API

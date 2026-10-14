@@ -37,7 +37,9 @@ RaizesDoNordeste/
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [Visual Studio 2022+](https://visualstudio.microsoft.com/pt-br/downloads/) ou VS Code com extensao C#
+- [Visual Studio 2022+](https://visualstudio.microsoft.com/pt-br/downloads/)
+- [Postman](https://www.postman.com/downloads/) (Opcional)
+- [Git](https://git-scm.com/install/windows)
 
 ---
 ## Verificar as instalações
@@ -102,13 +104,22 @@ dotnet ef --version
 cd RaizesDoNordeste.API
 dotnet ef database update --project ..\RaizesDoNordeste.Infrastructure
 ```
-### 5. Executar a API
+
+### 5. Importar a coleção de testes no Postman
+    1. Abra o postman
+    2. Clique em Import no canto superior esquerdo
+    3. Selecione os dois arquivos da raiz do repositório
+      - raizes-nordeste.postman_collection
+      - raizes-nordeste.postman_environment
+    4. No canto superior direito do Postman, selecione o environment Local
+    
+### 6. Executar a API
 
 ```bash
 dotnet run --project RaizesDoNordeste.API
 ```
 
-A API estara disponivel em: `https://localhost:7XXX/swagger` (a porta exata aparece no console).
+A API estara disponivel automaticamente no Swagger.
 
 ---
 
